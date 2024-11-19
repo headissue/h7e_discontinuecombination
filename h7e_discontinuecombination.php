@@ -20,7 +20,9 @@ class H7e_DiscontinueCombination extends Module {
         parent::__construct();
 
         $this->displayName = $this->l('Discontinue product combination');
-        $this->description = $this->l('');
+        $this->description = $this->l(
+            'When the MPN of a product combination is ending in "#" and has quantity of '
+            .'0 this combination is removed from the options on the product page');
     }
 
     public function install(): bool {
@@ -48,8 +50,6 @@ class H7e_DiscontinueCombination extends Module {
         }
         $colors = $this->context->smarty->getTemplateVars('colors');
         $combinationImages = $this->context->smarty->getTemplateVars('combinationImages');
-        // file_put_contents('/var/www/html/var/logs/jeans-debug.log','HOOK params: '.print_r($params, true).PHP_EOL , FILE_APPEND | LOCK_EX);
-        file_put_contents('/var/www/html/var/logs/jeans-debug.log','combinations: '.print_r($combinations, true).PHP_EOL , FILE_APPEND | LOCK_EX);
         // remove combinations / variants with 0 stock and MPN with discontinued marker
         $productAttributes = $this->context->smarty->getTemplateVars('product')['attributes'];
         $id_color = 0;
@@ -59,8 +59,6 @@ class H7e_DiscontinueCombination extends Module {
                 $id_color =  $id;
             }
         }
-        file_put_contents('/var/www/html/var/logs/jeans-debug.log','productAttributes: '.print_r($productAttributes, true).PHP_EOL , FILE_APPEND | LOCK_EX);
-        file_put_contents('/var/www/html/var/logs/jeans-debug.log','selectedColorId: '.print_r($id_color, true).PHP_EOL , FILE_APPEND | LOCK_EX);
         $usedAttributes = [];
         $attributesToRemove = [];
         $discoCombo = false;
@@ -95,8 +93,6 @@ class H7e_DiscontinueCombination extends Module {
         foreach ($attributesToRemove as $key => $value) {
             unset($usedAttributes[$key]);
         }
-        file_put_contents('/var/www/html/var/logs/jeans-debug.log','result: '.print_r($combinations, true).PHP_EOL , FILE_APPEND | LOCK_EX);
-        file_put_contents('/var/www/html/var/logs/jeans-debug.log','used: '.print_r($usedAttributes, true).PHP_EOL , FILE_APPEND | LOCK_EX);
         if ($colors) {
             // remove unused color
             foreach ($colors as $id => & $value) {

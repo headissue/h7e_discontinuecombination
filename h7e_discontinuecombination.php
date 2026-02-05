@@ -103,7 +103,7 @@ class H7e_DiscontinueCombination extends Module {
         }
         // remove unused image
         if ($combinationImages) {
-            foreach ($colors as $id => & $value) {
+            foreach ($combinationImages as $id => & $value) {
                 if (!isset($usedAttributes[$id])) {
                     unset($combinationImages[$id]);
                 }

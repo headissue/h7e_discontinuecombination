@@ -4,6 +4,8 @@ if (!defined('_PS_VERSION_')) {
 }
 
 class H7e_DiscontinueCombination extends Module {
+    
+    const DISCO_MARKER = '#';
 
     public function __construct() {
         $this->name = 'h7e_discontinuecombination';
@@ -21,7 +23,7 @@ class H7e_DiscontinueCombination extends Module {
 
         $this->displayName = $this->l('Discontinue product combination');
         $this->description = $this->l(
-            'When the MPN of a product combination is ending in "#" and has quantity of '
+            'When the MPN of a product combination is ending in "' . self::DISCO_MARKER . '" and has quantity of '
             .'0 this combination is removed from the options on the product page');
     }
 
@@ -63,7 +65,7 @@ class H7e_DiscontinueCombination extends Module {
         $attributesToRemove = [];
         $discoCombo = false;
         foreach ($combinations as $key => $combo) {
-            if (str_ends_with($combo['mpn'], '#') && $combo['quantity'] == 0) {
+            if (str_ends_with($combo['mpn'], self::DISCO_MARKER) && $combo['quantity'] == 0) {
                 // if discontinued, remove the combination
                 unset($combinations[$key]);
                 $discoCombo = true;
